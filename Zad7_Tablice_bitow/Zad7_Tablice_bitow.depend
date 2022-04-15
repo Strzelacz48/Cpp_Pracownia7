@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1650033079 source:/home/user/Pulpit/kody/CPP/Zad7/Cpp_Pracownia7/Zad7_Tablice_bitow/main.cpp
+	"header.hpp"
+
+1650033088 /home/user/Pulpit/kody/CPP/Zad7/Cpp_Pracownia7/Zad7_Tablice_bitow/header.hpp
+	<iostream>
+
