@@ -94,3 +94,42 @@ tabbit::tabbit& operator = (tabbit &&tb); // przypisanie przenoszące
     swap(tab,tb.tab);
     return *this; ;
 }
+tabbit::bool czytaj(int i) const; // metoda pomocnicza do odczytu bitu
+{
+    if(i%64==0)
+    {
+        if((tab[i/64])&0x1)
+            return 1;
+        return 0;
+    }
+    else
+    {
+        slowo temp=tab[i/64];
+        temp>>i%64;
+        if(temp&0x1)
+            return 1;
+        return 0;
+    }
+}
+tabbit::bool pisz(int i, bool b); // metoda pomocnicza do zapisu bitu
+{
+    if(i%64==0)
+    {
+        if(b)
+            tab[i/64]|=0x1;
+        tab[i/64]&=0xFFFFFFFE;
+    }
+    else
+    {
+        if(b)
+        {
+
+        }
+    }
+    return 1;
+}
+// indeksowanie dla stałych tablic bitowych
+tabbit::bool operator [] (int i) const;
+{
+    return czytaj(int i);
+}

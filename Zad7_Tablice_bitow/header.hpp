@@ -21,7 +21,7 @@ class tabbit {
         tabbit& operator = (tabbit &&tb); // przypisanie przenoszące
     private:
         bool czytaj(int i) const; // metoda pomocnicza do odczytu bitu
-        bool pisz(int i, bool b); // metoda pomocnicza do zapisu bitupublic:
+        bool pisz(int i, bool b); // metoda pomocnicza do zapisu bitu
         // indeksowanie dla stałych tablic bitowych
         bool operator [] (int i) const;
         // indeksowanie dla zwykłych tablic bitowych
