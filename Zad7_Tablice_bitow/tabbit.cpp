@@ -144,55 +144,131 @@ inline int tabbit::rozmiar() const
 tabbit& tabbit::operator | (tabbit b)
 {
     if(this.dl>b.dl)
-        tabbit temp(this.dl);
+    {
+        tabbit temp(this);
+        for(int i=0;i<=this.dl/64;i++)
+        {
+            temp.tab[i]=temp.tab[i]|b.tab[i];
+        }
+    }
     else
-        tabbit temp(b.dl);
+    {
+        tabbit temp(b);
+        for(int i=0;i<=b.dl/64;i++)
+        {
+            temp.tab[i]=temp.tab[i]|this.tab[i];
+        }
+    }
+    return &temp;
 }
 tabbit& tabbit::operator |= (tabbit b)
 {
     if(this.dl>b.dl)
-        tabbit temp(this.dl);
+    {
+        //tabbit temp(this);
+        for(int i=0;i<=this.dl/64;i++)
+        {
+            this.tab[i]=this.tab[i]|b.tab[i];
+        }
+    }
     else
-        tabbit temp(b.dl);
+    {
+        tabbit temp(b);
+        for(int i=0;i<=b.dl/64;i++)
+        {
+            this.tab[i]=this.tab[i]|b.tab[i];
+        }
+    }
+    return this;
 }
 tabbit& tabbit::operator & (tabbit b)
 {
     if(this.dl>b.dl)
-        tabbit temp(this.dl);
+    {
+        tabbit temp(this);
+        for(int i=0;i<=this.dl/64;i++)
+        {
+            temp.tab[i]=temp.tab[i]&b.tab[i];
+        }
+    }
     else
-        tabbit temp(b.dl);
+    {
+        tabbit temp(b);
+        for(int i=0;i<=b.dl/64;i++)
+        {
+            temp.tab[i]=temp.tab[i]&this.tab[i];
+        }
+    }
+    return &temp;
 }
 tabbit& tabbit::operator &= (tabbit b)
 {
     if(this.dl>b.dl)
-        tabbit temp(this.dl);
+    {
+        //tabbit temp(this);
+        for(int i=0;i<=this.dl/64;i++)
+        {
+            this.tab[i]=this.tab[i]&b.tab[i];
+        }
+    }
     else
-        tabbit temp(b.dl);
+    {
+        tabbit temp(b);
+        for(int i=0;i<=b.dl/64;i++)
+        {
+            this.tab[i]=this.tab[i]&b.tab[i];
+        }
+    }
+    return this;
 }
 tabbit& tabbit::operator ^ (tabbit b)
 {
     if(this.dl>b.dl)
-        tabbit temp(this.dl);
+    {
+        tabbit temp(this);
+        for(int i=0;i<=this.dl/64;i++)
+        {
+            temp.tab[i]=temp.tab[i]^b.tab[i];
+        }
+    }
     else
-        tabbit temp(b.dl);
+    {
+        tabbit temp(b);
+        for(int i=0;i<=b.dl/64;i++)
+        {
+            temp.tab[i]=temp.tab[i]^this.tab[i];
+        }
+    }
+    return &temp;
 }
 tabbit& tabbit::operator ^= (tabbit b)
 {
     if(this.dl>b.dl)
-        tabbit temp(this.dl);
+    {
+        //tabbit temp(this);
+        for(int i=0;i<=this.dl/64;i++)
+        {
+            this.tab[i]=this.tab[i]^b.tab[i];
+        }
+    }
     else
-        tabbit temp(b.dl);
+    {
+        tabbit temp(b);
+        for(int i=0;i<=b.dl/64;i++)
+        {
+            this.tab[i]=this.tab[i]^b.tab[i];
+        }
+    }
+    return this;
 }
 tabbit& tabbit::operator ! ()
 {
-    tabbit temp(this.dl);
-    for(int i=0;i<this.dl/64;i++)
+    tabbit temp(this);
+    for(int i=0;i<=this.dl/64;i++)
     {
-        if(i==this.dl-1)
-        {
-
-        }
+        temp.tab[i]=!temp.tab[i];
     }
+    return temp;
 }
 bool tabbit::operator [] (int i) const
 {
