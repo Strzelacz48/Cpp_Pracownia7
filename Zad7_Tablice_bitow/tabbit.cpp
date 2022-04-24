@@ -143,32 +143,32 @@ inline int tabbit::rozmiar() const
 }
 tabbit& tabbit::operator | (tabbit b)
 {
-    if(this.dl>b.dl)
-    {
-        tabbit temp(this);
-        for(int i=0;i<=this.dl/64;i++)
+    tabbit temp=tabbit(dl);
+    if(dl>b.dl)
+    {        temp=*this;
+        for(int i=0;i<=dl/64;i++)
         {
             temp.tab[i]=temp.tab[i]|b.tab[i];
         }
     }
     else
     {
-        tabbit temp(b);
+        temp=b;
         for(int i=0;i<=b.dl/64;i++)
         {
-            temp.tab[i]=temp.tab[i]|this.tab[i];
+            temp.tab[i]=temp.tab[i]|tab[i];
         }
     }
-    return &temp;
+    return temp;
 }
 tabbit& tabbit::operator |= (tabbit b)
 {
-    if(this.dl>b.dl)
+    if(dl>b.dl)
     {
         //tabbit temp(this);
-        for(int i=0;i<=this.dl/64;i++)
+        for(int i=0;i<=dl/64;i++)
         {
-            this.tab[i]=this.tab[i]|b.tab[i];
+            tab[i]=tab[i]|b.tab[i];
         }
     }
     else
@@ -176,39 +176,39 @@ tabbit& tabbit::operator |= (tabbit b)
         tabbit temp(b);
         for(int i=0;i<=b.dl/64;i++)
         {
-            this.tab[i]=this.tab[i]|b.tab[i];
+            tab[i]=tab[i]|b.tab[i];
         }
     }
-    return this;
+    return *this;
 }
 tabbit& tabbit::operator & (tabbit b)
 {
-    if(this.dl>b.dl)
-    {
-        tabbit temp(this);
-        for(int i=0;i<=this.dl/64;i++)
+    tabbit temp=tabbit(dl);
+    if(dl>b.dl)
+    {        temp=*this;
+        for(int i=0;i<=dl/64;i++)
         {
             temp.tab[i]=temp.tab[i]&b.tab[i];
         }
     }
     else
     {
-        tabbit temp(b);
+        temp=b;
         for(int i=0;i<=b.dl/64;i++)
         {
-            temp.tab[i]=temp.tab[i]&this.tab[i];
+            temp.tab[i]=temp.tab[i]&tab[i];
         }
     }
-    return &temp;
+    return temp;
 }
 tabbit& tabbit::operator &= (tabbit b)
 {
-    if(this.dl>b.dl)
+    if(dl>b.dl)
     {
         //tabbit temp(this);
-        for(int i=0;i<=this.dl/64;i++)
+        for(int i=0;i<=dl/64;i++)
         {
-            this.tab[i]=this.tab[i]&b.tab[i];
+            tab[i]=tab[i]&b.tab[i];
         }
     }
     else
@@ -216,39 +216,39 @@ tabbit& tabbit::operator &= (tabbit b)
         tabbit temp(b);
         for(int i=0;i<=b.dl/64;i++)
         {
-            this.tab[i]=this.tab[i]&b.tab[i];
+            tab[i]=tab[i]&b.tab[i];
         }
     }
-    return this;
+    return *this;
 }
 tabbit& tabbit::operator ^ (tabbit b)
 {
-    if(this.dl>b.dl)
-    {
-        tabbit temp(this);
-        for(int i=0;i<=this.dl/64;i++)
+    tabbit temp=tabbit(dl);
+    if(dl>b.dl)
+    {        temp=*this;
+        for(int i=0;i<=dl/64;i++)
         {
             temp.tab[i]=temp.tab[i]^b.tab[i];
         }
     }
     else
     {
-        tabbit temp(b);
+        temp=b;
         for(int i=0;i<=b.dl/64;i++)
         {
-            temp.tab[i]=temp.tab[i]^this.tab[i];
+            temp.tab[i]=temp.tab[i]^tab[i];
         }
     }
-    return &temp;
+    return temp;
 }
 tabbit& tabbit::operator ^= (tabbit b)
 {
-    if(this.dl>b.dl)
+    if(dl>b.dl)
     {
         //tabbit temp(this);
-        for(int i=0;i<=this.dl/64;i++)
+        for(int i=0;i<=dl/64;i++)
         {
-            this.tab[i]=this.tab[i]^b.tab[i];
+            tab[i]=tab[i]^b.tab[i];
         }
     }
     else
@@ -256,21 +256,37 @@ tabbit& tabbit::operator ^= (tabbit b)
         tabbit temp(b);
         for(int i=0;i<=b.dl/64;i++)
         {
-            this.tab[i]=this.tab[i]^b.tab[i];
+            tab[i]=tab[i]^b.tab[i];
         }
     }
-    return this;
+    return *this;
 }
 tabbit& tabbit::operator ! ()
 {
-    tabbit temp(this);
-    for(int i=0;i<=this.dl/64;i++)
+    tabbit temp=tabbit(dl);
+    for(int i=0;i<=dl/64;i++)
     {
         temp.tab[i]=!temp.tab[i];
     }
     return temp;
 }
+istream & tabbit::operator >> (istream &we, tabbit &tb)
+{
+    for(int i=tb.dl-1;i>=0;i--)
+    {
+       we>>tb.tab[i];
+    }
+    return we;
+}
+ostream & tabbit::operator << (ostream &wy, const tabbit &tb)
+{
+    for(int i=0;i<=tb.dl/64;i++)
+    {
+       wy<<tb.tab[i]<<" ";
+    }
+    return wy;
+}
 bool tabbit::operator [] (int i) const
 {
-    return czytaj(int i);
+    return czytaj(i);
 }

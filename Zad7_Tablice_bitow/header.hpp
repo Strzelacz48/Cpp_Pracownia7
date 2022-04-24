@@ -1,9 +1,10 @@
 #include <iostream>
+using namespace std;
 class tabbit {
     typedef uint64_t slowo; // komorka w tablicy
     static const int rozmiarSlowa; // rozmiar slowa w bitach
-    //friend istream & operator >> (istream &we, tab_bit &tb);
-    //friend ostream & operator << (ostream &wy, const tab_bit &tb);
+    friend istream & operator >> (istream &we, tabbit &tb);
+    friend ostream & operator << (ostream &wy, const tabbit &tb);
     class ref; // klasa pomocnicza do adresowania bitów
     protected:
         int dl; // liczba bitów
@@ -22,6 +23,7 @@ class tabbit {
     private:
         bool czytaj(int i) const; // metoda pomocnicza do odczytu bitu
         void pisz(int i, bool b); // metoda pomocnicza do zapisu bitu
+    public:
         // indeksowanie dla stałych tablic bitowych
         bool operator [] (int i) const;
         // indeksowanie dla zwykłych tablic bitowych
@@ -41,6 +43,5 @@ class tabbit {
 class ref
 {
     public:
-        int dlugosc;
-        slowo *tabela;
+        //metody do operacji na danych bitach
 };
