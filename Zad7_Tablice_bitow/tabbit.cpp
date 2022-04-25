@@ -2,6 +2,10 @@
 // wyzerowana tablica bitow [0...rozm]
 tabbit::tabbit(int rozmiar)
 {
+    if(rozmiar<=0)
+    {
+        throw("Zostala podana zla wielkosc talicy");
+    }
     dl=rozmiar;
     //rozmiarSlowa=rozmiar;
     if(rozmiar%64!=0)
@@ -67,7 +71,6 @@ tabbit::tabbit(tabbit &&tb) // konstruktor przenoszący
     {
         std::swap(tab[i],tb.tab[i]);
     }
-
 }
 tabbit& tabbit::operator = (const tabbit &tb) // przypisanie kopiujące
 {
@@ -78,6 +81,8 @@ tabbit& tabbit::operator = (const tabbit &tb) // przypisanie kopiujące
     dl=tb.dl;
     //rozmiarSlowa=tb.rozmiarSlowa
     //a=new double[n+1];
+    delete[]tab;
+    tab= new tab[dl];
     for(int i=0;i<dl;i++)
     {
         tab[i]=tb.tab[i];
@@ -97,6 +102,10 @@ tabbit& tabbit::operator = (tabbit &&tb) // przypisanie przenoszące
 }
 bool tabbit::czytaj(int i) const // metoda pomocnicza do odczytu bitu
 {
+    if(i>dl)
+    {
+        throw("Proba odwolania sie do elementu poza tablica");
+    }
     if(i%64==0)
     {
         if((tab[i/64])&0x1)
@@ -114,6 +123,10 @@ bool tabbit::czytaj(int i) const // metoda pomocnicza do odczytu bitu
 }
 void tabbit::pisz(int i, bool b) // metoda pomocnicza do zapisu bitu
 {
+    if(i>dl)
+    {
+        throw("Proba odwolania sie do elementu poza tablica");
+    }
     if(i%64==0)
     {
         if(b)
@@ -270,7 +283,7 @@ tabbit& tabbit::operator ! ()
     }
     return temp;
 }
-istream & tabbit::operator >> (istream &we, tabbit &tb)
+/*istream & tabbit::operator >> (istream &we, tabbit &tb)
 {
     for(int i=tb.dl-1;i>=0;i--)
     {
@@ -285,7 +298,7 @@ ostream & tabbit::operator << (ostream &wy, const tabbit &tb)
        wy<<tb.tab[i]<<" ";
     }
     return wy;
-}
+}*/
 bool tabbit::operator [] (int i) const
 {
     return czytaj(i);
