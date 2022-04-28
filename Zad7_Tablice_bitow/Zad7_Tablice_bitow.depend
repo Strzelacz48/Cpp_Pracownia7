@@ -5,14 +5,14 @@
 1650057394 /home/user/Pulpit/kody/CPP/Zad7/Cpp_Pracownia7/Zad7_Tablice_bitow/header.hpp
 	<iostream>
 
-1651145893 source:d:\projekty\do programowania\c i c++\cpp_pracownia7\cpp_pracownia7\zad7_tablice_bitow\main.cpp
+1651172015 source:d:\projekty\do programowania\c i c++\cpp_pracownia7\cpp_pracownia7\zad7_tablice_bitow\main.cpp
 	"header.hpp"
 
-1651145875 d:\projekty\do programowania\c i c++\cpp_pracownia7\cpp_pracownia7\zad7_tablice_bitow\header.hpp
+1651172257 d:\projekty\do programowania\c i c++\cpp_pracownia7\cpp_pracownia7\zad7_tablice_bitow\header.hpp
 	<iostream>
 	<cstdint>
 
-1651152648 source:d:\projekty\do programowania\c i c++\cpp_pracownia7\cpp_pracownia7\zad7_tablice_bitow\tabbit.cpp
+1651172798 source:d:\projekty\do programowania\c i c++\cpp_pracownia7\cpp_pracownia7\zad7_tablice_bitow\tabbit.cpp
 	<algorithm>
 	<cstring>
 	"header.hpp"

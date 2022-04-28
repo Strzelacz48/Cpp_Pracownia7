@@ -1,72 +1,56 @@
 #include<algorithm>
 #include<cstring>
 #include "header.hpp"
-namespace obliczenia
-{
+namespace obliczenia {
 // wyzerowana tablica bitow [0...rozm]
-tabbit::tabbit(int rozmiar)
-{
-    if(rozmiar<=0)
-    {
+tabbit::tabbit(int rozmiar) {
+    if(rozmiar<=0) {
         throw("Zostala podana zla wielkosc talicy");
     }
     dl=rozmiar;
     //rozmiarSlowa=rozmiar;
-    if(rozmiar%64!=0)
-    {
+    if(rozmiar%64!=0) {
         tab= new slowo [(rozmiar/64)+1];
-        for(int i=0;i<(rozmiar/64)+1;i++)
-        {
-            tab[i]=0;
+        for(int i=0; i<(rozmiar/64)+1; i++) {
+            zapisz(i,0);
         }
-    }
-    else
-    {
+    } else {
         tab= new slowo[rozmiar/64];
-        for(int i=0;i<rozmiar/64;i++)
-        {
-            tab[i]=0;
+        for(int i=0; i<rozmiar/64; i++) {
+            zapisz(i,0);
         }
     }
 }// tablica bitów [0...rozmiarSlowa] zainicjalizowana wzorcem
-tabbit::tabbit(std::initializer_list<bool> bits) : tabbit((int)bits.size())
-{
+tabbit::tabbit(std::initializer_list<bool> bits) : tabbit((int)bits.size()) {
     int i=rozmiar();
-    for(bool b : bits)
-    {
+    for(bool b : bits) {
         zapisz(--i,b);
     }
 }
-tabbit::tabbit(slowo tb)
-{
+tabbit::tabbit(slowo tb) {
     tab=new slowo[1];
     tab[0]=tb;
     dl=0;
-    while(tb!=0)
-    {
+    while(tb!=0) {
         dl++;
         tb/=2;
     }
     //rozmiarSlowa=dl;
 }
 // destruktor
-tabbit::~tabbit()
-{
+tabbit::~tabbit() {
     delete[]tab;
 }
-tabbit::tabbit(const tabbit &tb)// konstruktor kopiujący
-{
+tabbit::tabbit(const tabbit &tb) { // konstruktor kopiujący
     //rozmiarSlowa=tb.rozmiarSlowa();
     dl=tb.dl;
     int pom=(dl-1+rozmiarSlowa)/rozmiarSlowa;
     tab= new slowo[pom];
-    for(int i=0;i<pom;i++)
-        {
-            tab[i]=tb.tab[i];
-        }
+    for(int i=0; i<pom; i++) {
+        tab[i]=tb.tab[i];
+    }
 }
-tabbit::tabbit(tabbit &&tb) // konstruktor przenoszący
-{
+tabbit::tabbit(tabbit &&tb) { // konstruktor przenoszący
     std::swap(tab,tb.tab);
     std::swap(dl,tb.dl);
     //std::swap(rozmiarSlowa,tb.rozmiarSlowa);
@@ -75,10 +59,8 @@ tabbit::tabbit(tabbit &&tb) // konstruktor przenoszący
         std::swap(tab[i],tb.tab[i]);
     }*/
 }
-tabbit& tabbit::operator = (const tabbit &tb) // przypisanie kopiujące
-{
-    if(&tb==this)
-    {
+tabbit& tabbit::operator = (const tabbit &tb) { // przypisanie kopiujące
+    if(&tb==this) {
         return *this;
     }
     dl=tb.dl;
@@ -87,16 +69,13 @@ tabbit& tabbit::operator = (const tabbit &tb) // przypisanie kopiujące
     delete[]tab;
     int pom=(dl-1+rozmiarSlowa)/rozmiarSlowa;
     tab= new slowo[pom];
-    for(int i=0;i<pom;i++)
-    {
+    for(int i=0; i<pom; i++) {
         tab[i]=tb.tab[i];
     }
     return *this;;
 }
-tabbit& tabbit::operator = (tabbit &&tb) // przypisanie przenoszące
-{
-    if(&tb==this)
-    {
+tabbit& tabbit::operator = (tabbit &&tb) { // przypisanie przenoszące
+    if(&tb==this) {
         return *this;
     }
     std::swap(dl,tb.dl);
@@ -104,244 +83,178 @@ tabbit& tabbit::operator = (tabbit &&tb) // przypisanie przenoszące
     std::swap(tab,tb.tab);
     return *this; ;
 }
-bool tabbit::czytaj(int i) const // metoda pomocnicza do odczytu bitu
-{
-    if(i>dl)
-    {
+bool tabbit::czytaj(int i) const { // metoda pomocnicza do odczytu bitu
+    if(i>dl || i<0) {
         throw("Proba odwolania sie do elementu poza tablica");
     }
-    if(i%64==0)
-    {
+    if(i%64==0) {
         if((tab[i/64])&0x1)
             return 1;
         return 0;
-    }
-    else
-    {
+    } else {
         slowo temp=tab[i/64];
-        temp>>i%64;
+        temp>>=(i%64);
         if(temp&0x1)
             return 1;
         return 0;
     }
 }
-bool tabbit::zapisz(int i, bool b) // metoda pomocnicza do zapisu bitu
-{
-    if(i>dl)
-    {
+bool tabbit::zapisz(int i, bool b) { // metoda pomocnicza do zapisu bitu
+    if(i>dl) {
         throw("Proba odwolania sie do elementu poza tablica");
     }
-    if(i%64==0)
-    {
-        if(b)
-            tab[i/64]|=0x1;
-        else
-            tab[i/64]&=0xFFFFFFFFFFFFFFFE;
+    if(b) {
+        slowo temp=0x1<<i%64;
+        tab[i/64]|=temp;
+    } else {
+        slowo temp=(0xFFFFFFFFFFFFFFFF)^(0x1<<i%64);
+        tab[i/64]&=temp;
     }
-    else
-    {
-        if(b)
-        {
-            slowo temp=0x1<<i%64;
-            tab[i/64]|=temp;
-        }
-        else
-        {
-            slowo temp=(0xFFFFFFFFFFFFFFFF)^(0x1<<i%64);
-            tab[i/64]&=temp;
-        }
-    }
-    return 1;
+    return b;
 }
 //void tabbit::zapisz(int i, bool b)
 // indeksowanie dla stałych tablic bitowych
-inline int tabbit::rozmiar() const
-{
+inline int tabbit::rozmiar() const {
     return dl;
 }
-tabbit& tabbit::operator | (tabbit b)
-{
+tabbit& tabbit::operator | (tabbit b) {
     tabbit temp=tabbit(dl);
-    if(dl>b.dl)
-    {        temp=*this;
-        for(int i=0;i<=dl/64;i++)
-        {
+    if(dl>b.dl) {
+        temp=*this;
+        for(int i=0; i<=dl/64; i++) {
             temp.tab[i]=temp.tab[i]|b.tab[i];
         }
-    }
-    else
-    {
+    } else {
         temp=b;
-        for(int i=0;i<=b.dl/64;i++)
-        {
+        for(int i=0; i<=b.dl/64; i++) {
             temp.tab[i]=temp.tab[i]|tab[i];
         }
     }
     return temp;
 }
-tabbit& tabbit::operator |= (tabbit b)
-{
-    if(dl>b.dl)
-    {
+tabbit& tabbit::operator |= (tabbit b) {
+    if(dl>b.dl) {
         //tabbit temp(this);
-        for(int i=0;i<=dl/64;i++)
-        {
+        for(int i=0; i<=dl/64; i++) {
             tab[i]=tab[i]|b.tab[i];
         }
-    }
-    else
-    {
+    } else {
         tabbit temp(b);
-        for(int i=0;i<=b.dl/64;i++)
-        {
+        for(int i=0; i<=b.dl/64; i++) {
             tab[i]=tab[i]|b.tab[i];
         }
     }
     return *this;
 }
-tabbit& tabbit::operator & (tabbit b)
-{
+tabbit& tabbit::operator & (tabbit b) {
     tabbit temp=tabbit(dl);
-    if(dl>b.dl)
-    {        temp=*this;
-        for(int i=0;i<=dl/64;i++)
-        {
+    if(dl>b.dl) {
+        temp=*this;
+        for(int i=0; i<=dl/64; i++) {
             temp.tab[i]=temp.tab[i]&b.tab[i];
         }
-    }
-    else
-    {
+    } else {
         temp=b;
-        for(int i=0;i<=b.dl/64;i++)
-        {
+        for(int i=0; i<=b.dl/64; i++) {
             temp.tab[i]=temp.tab[i]&tab[i];
         }
     }
     return temp;
 }
-tabbit& tabbit::operator &= (tabbit b)
-{
-    if(dl>b.dl)
-    {
+tabbit& tabbit::operator &= (tabbit b) {
+    if(dl>b.dl) {
         //tabbit temp(this);
-        for(int i=0;i<=dl/64;i++)
-        {
+        for(int i=0; i<=dl/64; i++) {
             tab[i]=tab[i]&b.tab[i];
         }
-    }
-    else
-    {
+    } else {
         tabbit temp(b);
-        for(int i=0;i<=b.dl/64;i++)
-        {
+        for(int i=0; i<=b.dl/64; i++) {
             tab[i]=tab[i]&b.tab[i];
         }
     }
     return *this;
 }
-tabbit& tabbit::operator ^ (tabbit b)
-{
+tabbit& tabbit::operator ^ (tabbit b) {
     tabbit temp=tabbit(dl);
-    if(dl>b.dl)
-    {        temp=*this;
-        for(int i=0;i<=dl/64;i++)
-        {
+    if(dl>b.dl) {
+        temp=*this;
+        for(int i=0; i<=dl/64; i++) {
             temp.tab[i]=temp.tab[i]^b.tab[i];
         }
-    }
-    else
-    {
+    } else {
         temp=b;
-        for(int i=0;i<=b.dl/64;i++)
-        {
+        for(int i=0; i<=b.dl/64; i++) {
             temp.tab[i]=temp.tab[i]^tab[i];
         }
     }
     return temp;
 }
-tabbit& tabbit::operator ^= (tabbit b)
-{
-    if(dl>b.dl)
-    {
+tabbit& tabbit::operator ^= (tabbit b) {
+    if(dl>b.dl) {
         //tabbit temp(this);
-        for(int i=0;i<=dl/64;i++)
-        {
+        for(int i=0; i<=dl/64; i++) {
             tab[i]=tab[i]^b.tab[i];
         }
-    }
-    else
-    {
+    } else {
         tabbit temp(b);
-        for(int i=0;i<=b.dl/64;i++)
-        {
+        for(int i=0; i<=b.dl/64; i++) {
             tab[i]=tab[i]^b.tab[i];
         }
     }
     return *this;
 }
-tabbit& tabbit::operator ! ()
-{
+tabbit& tabbit::operator ! () {
     tabbit temp=tabbit(dl);
-    for(int i=0;i<=dl/64;i++)
-    {
+    for(int i=0; i<=dl/64; i++) {
         temp.tab[i]=!temp.tab[i];
     }
     return temp;
 }
-istream & operator >> (istream &we, tabbit &tb)
-{
-    for(int i=tb.dl-1;i>=0;i--)
-    {
-       we>>tb.tab[i];
+istream & operator >> (istream &we, tabbit &tb) {
+    for(int i=tb.dl-1; i>=0; i--) {
+        we>>tb.tab[i];
     }
     return we;
 }
-ostream & operator << (ostream &wy, const tabbit &tb)
-{
-    for(int i=0;i<=tb.dl/64;i++)
-    {
-       wy<<tb.tab[i]<<" ";
+ostream & operator << (ostream &wy, const tabbit &tb) {
+    for(int i=0; i<tb.dl; i++) {
+        wy<<tb.czytaj(i)<<" ";
     }
     return wy;
 }
-bool tabbit::operator [] (int i) const
-{
-    if(i<0 || i>=dl)
-    {
+bool tabbit::operator [] (int i) const {
+    if(i<0 || i>=dl) {
         throw("Proba odwolania sie do elementu poza tablica");
     }
     return czytaj(i);
 }
 
-tabbit::ref::ref(tabbit *tb, int i)
-{
+tabbit::ref::ref(tabbit *tb, int i) {
     tablicabit=tb;
     indeks=i;
 }
 
-void tabbit::ref::wypisz()
-{
-    for(int i=0;i<tablicabit->rozmiar();i++)
-    {
+void tabbit::ref::wypisz() {
+    for(int i=0; i<tablicabit->rozmiar(); i++) {
         if(i==64)
             cout<<" ";
         cout<<tablicabit->czytaj(i);
     }
 }
 
-bool tabbit::ref::operator=(bool a)
-{
+bool tabbit::ref::operator=(bool a) {
     return tablicabit->zapisz(indeks,a);
 }
 
+tabbit::ref::operator bool() {
+    return tablicabit->czytaj(indeks);
+}
 
-tabbit::ref tabbit::operator [] (int i)
-{
-    if(i<0 || i>=dl)
-    {
+tabbit::ref tabbit::operator [] (int i) {
+    if(i<0 || i>=dl) {
         throw("Proba odwolania sie do elementu poza tablica");
     }
     return {this,i};
 }
-
 }

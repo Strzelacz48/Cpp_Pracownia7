@@ -17,6 +17,7 @@ namespace obliczenia
             public:
                 void wypisz();
                 bool operator=(bool);
+                operator bool();
         };
         protected:
             int dl; // liczba bitów
