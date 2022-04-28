@@ -1,13 +1,23 @@
 #include <iostream>
+#include<cstdint>
 using namespace std;
-//namespace obliczenia
-//{
+namespace obliczenia
+{
     class tabbit {
         typedef uint64_t slowo; // komorka w tablicy
-        static const int rozmiarSlowa; // rozmiar slowa w bitach
-        //friend istream & operator >> (istream &we, tabbit &tb);
-        //friend ostream & operator << (ostream &wy, const tabbit &tb);
-        class ref; // klasa pomocnicza do adresowania bitów
+        static const int rozmiarSlowa=8*sizeof(slowo); // rozmiar slowa w bitach
+        friend istream & operator >> (istream &we, tabbit &tb);
+        friend ostream & operator << (ostream &wy, const tabbit &tb);
+        class ref // klasa pomocnicza do adresowania bitów
+        {
+                tabbit *tablicabit;
+                int indeks;
+            public:
+                ref(tabbit *tb,int indeks);
+            public:
+                void wypisz();
+                bool operator=(bool);
+        };
         protected:
             int dl; // liczba bitów
             slowo *tab; // tablica bitów
@@ -22,9 +32,10 @@ using namespace std;
             tabbit(tabbit &&tb); // konstruktor przenoszący
             tabbit& operator = (const tabbit &tb); // przypisanie kopiujące
             tabbit& operator = (tabbit &&tb); // przypisanie przenoszące
+            tabbit(std::initializer_list<bool> bits); // lista inicjalizacyjna
         private:
             bool czytaj(int i) const; // metoda pomocnicza do odczytu bitu
-            void pisz(int i, bool b); // metoda pomocnicza do zapisu bitu
+            bool zapisz(int i, bool b); // metoda pomocnicza do zapisu bitu
         public:
             // indeksowanie dla stałych tablic bitowych
             bool operator [] (int i) const;
@@ -42,11 +53,4 @@ using namespace std;
             tabbit& operator ^= (tabbit b);
             tabbit& operator ! ();
     };
-
-    class ref
-    {
-        public:
-            void wypisz(tabbit tb);
-            bool operator [] (int i);
-    };
-//}
+}
